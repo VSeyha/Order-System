@@ -1,7 +1,6 @@
 package com.order.model;
 
 
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -85,3 +84,5 @@ public class Product {
         this.quantity = quantity;
     }
 }
+
+

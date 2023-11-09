@@ -6,10 +6,6 @@ import jdk.net.SocketFlow;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,11 +37,24 @@ public class ProductController {
 
     @RequestMapping (value = "update/{id}",method = RequestMethod.PUT)
     public ResponseEntity<Object> updateProduct(@PathVariable("id") String id,@RequestBody Product newProduct) {
-        Optional<Product> product = getProduct(id);
-        if (product.isPresent()){
-            product.map(Product::getName);
+        Optional<Product> productOptional = getProduct(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+
+            // Update the product properties with the new values
+
+            product.setName(newProduct.getName());
+            product.setDescription(newProduct.getDescription());
+            product.setPrice(newProduct.getPrice());
+            product.setQuantity(newProduct.getQuantity());
+            // Save the updated product
+
+            // Your code for saving the product goes here
+            productRepository.save(product);
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
         }
-        return new  ResponseEntity<Object>(product,HttpStatus.OK);
     }
 
 }
